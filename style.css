@@ -55,10 +55,10 @@ ul {
     .subsection-title {
         font-size : 1.5em;
     }
-    #marquee-footer {
-        display: inline;
-    }
     #basic-text-footer {
+        display: none;
+    }
+    #psst {
         display: none;
     }
 }
@@ -82,6 +82,9 @@ ul {
     }
     ul {
         line-height: 30px;
+    }
+    #psst {
+        display: none;
     }
 }
 .q {
