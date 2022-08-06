@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<style>
+		.spaced {
+			padding:10px;
+			margin:15px;
+			width:80%;
+			height:60px;
+			border-width:2px;
+			align-self:center;
+			font-size:40px;
+		}
+	</style>
+</head>
+<body>
+<p id="auth" style="font-size:30px;"/>
+<form id="verify" style="display:flex;flex-direction:column;">
+	<input class="spaced" placeholder="Enter password" id="password" type="password"/>
+	<input class="spaced" placeholder="3 letter word" id="three" type="text"/>
+	<input class="spaced" placeholder="4 letter word" id="four" type="text"/>
+	<input class="spaced" placeholder="5 letter word" id="five" type="text"/>
+	<input class="spaced" type="submit"/>
+</form>
+<script>
+/*
+    cyrb53 (c) 2018 bryc (github.com/bryc)
+    A fast and simple hash function with decent collision resistance.
+    Largely inspired by MurmurHash2/3, but with a focus on speed/simplicity.
+    Public domain. Attribution appreciated.
+*/
+const cyrb53 = function(str, seed = 0) {
+    let h1 = 0xdeadbeef ^ seed, h2 = 0x41c6ce57 ^ seed;
+    for (let i = 0, ch; i < str.length; i++) {
+        ch = str.charCodeAt(i);
+        h1 = Math.imul(h1 ^ ch, 2654435761);
+        h2 = Math.imul(h2 ^ ch, 1597334677);
+    }
+    h1 = Math.imul(h1 ^ (h1>>>16), 2246822507) ^ Math.imul(h2 ^ (h2>>>13), 3266489909);
+    h2 = Math.imul(h2 ^ (h2>>>16), 2246822507) ^ Math.imul(h1 ^ (h1>>>13), 3266489909);
+    return 4294967296 * (2097151 & h2) + (h1>>>0);
+};
+
+var seed = 359;
+var correctHash = 3853442602068247;
+
+submitWords = () => {
+	var three = document.getElementById("three").value;
+	var four = document.getElementById("four").value;
+	var five = document.getElementById("five").value;
+	//submit words to server
+}
+
+const form = document.getElementById("verify");
+form.addEventListener('submit', (event)=>{
+	event.preventDefault();
+	var val = document.getElementById("password").value;
+	var res = cyrb53(val,seed);
+    var auth = document.getElementById("auth");
+    if(res==correctHash) {
+    	auth.textContent = "Correct password, these words have been submitted as daily words!";
+        submitWords();
+    } else {
+    	auth.textContent = "Incorrect password. Please try again.";
+    }
+});
+
+
+</script>
+</body>
+</html>
