@@ -25,7 +25,7 @@
 <script type="module">
   // Import the functions you need from the SDKs you need
   import { initializeApp } from "https://www.gstatic.com/firebasejs/9.9.2/firebase-app.js";
-  import { getDatabase, ref, set } from "firebase/database";
+  import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/9.9.2/firebase-database.js";
   // TODO: Add SDKs for Firebase products that you want to use
   // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -42,9 +42,7 @@
 
   // Initialize Firebase
   const app = initializeApp(firebaseConfig);
-  const db = getDatabase();
-</script>
-<script>
+  const database = getDatabase(app);
 /*
     cyrb53 (c) 2018 bryc (github.com/bryc)
     A fast and simple hash function with decent collision resistance.
@@ -66,18 +64,16 @@ const cyrb53 = function(str, seed = 0) {
 var seed = 359;
 var correctHash = 3853442602068247;
 
-submitWords = () => {
+const submitWords = function() {
 	var three = document.getElementById("three").value;
 	var four = document.getElementById("four").value;
 	var five = document.getElementById("five").value;
-	//submit words to server
-	set(ref(db,'current'),{
+	set(ref(database, 'current'), {
 		three: three,
 		four: four,
 		five: five
 	});
 }
-
 const form = document.getElementById("verify");
 form.addEventListener('submit', (event)=>{
 	event.preventDefault();
