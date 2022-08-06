@@ -22,6 +22,28 @@
 	<input class="spaced" placeholder="5 letter word" id="five" type="text"/>
 	<input class="spaced" type="submit"/>
 </form>
+<script type="module">
+  // Import the functions you need from the SDKs you need
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.9.2/firebase-app.js";
+  import { getDatabase, ref, set } from "firebase/database";
+  // TODO: Add SDKs for Firebase products that you want to use
+  // https://firebase.google.com/docs/web/setup#available-libraries
+
+  // Your web app's Firebase configuration
+  const firebaseConfig = {
+    apiKey: "AIzaSyC6KfUA7nkVcivPV1ZinRQJRVX--oFRVoA",
+    authDomain: "sanketi-wordle.firebaseapp.com",
+    databaseURL: "https://sanketi-wordle-default-rtdb.asia-southeast1.firebasedatabase.app",
+    projectId: "sanketi-wordle",
+    storageBucket: "sanketi-wordle.appspot.com",
+    messagingSenderId: "553055548163",
+    appId: "1:553055548163:web:79792087901a57db16ef36"
+  };
+
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  const db = getDatabase();
+</script>
 <script>
 /*
     cyrb53 (c) 2018 bryc (github.com/bryc)
@@ -49,6 +71,11 @@ submitWords = () => {
 	var four = document.getElementById("four").value;
 	var five = document.getElementById("five").value;
 	//submit words to server
+	set(ref(db,'current'),{
+		three: three,
+		four: four,
+		five: five
+	});
 }
 
 const form = document.getElementById("verify");
