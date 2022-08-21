@@ -49,11 +49,12 @@
   const dbref = ref(database);
   get(child(dbref,'active')).then((snapshot)=>{
     var res = snapshot.val();
+    var rightNow = Date.now().toString();
     if(res['null']) { delete res['null']; };
     console.log(res);
     for(let key in res) {
       let value = res[key];
-      console.log(value);
+      if(parseint(rightNow,10) - parseint(value.toString(),10) > 500) { delete res[key]; }; 
     }
     var count = Object.keys(res).length;
     playing.textContent = count.toString() + " people played recently";
