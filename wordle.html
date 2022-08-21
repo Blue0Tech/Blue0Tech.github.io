@@ -57,7 +57,7 @@
       if(parseInt(rightNow,10) - parseInt(value.toString(),10) > (1000*60*60*24*7)) { delete res[key]; }; 
     }
     var count = Object.keys(res).length;
-    playing.textContent = count.toString() + " " + count==1?"person":"people" + " played in the past week.";
+    playing.textContent = count.toString() + " " + "people" + " played in the past week.";
   });
 /*
     cyrb53 (c) 2018 bryc (github.com/bryc)
