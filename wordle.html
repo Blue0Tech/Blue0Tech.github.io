@@ -51,13 +51,13 @@
     var res = snapshot.val();
     var rightNow = Date.now().toString();
     if(res['null']) { delete res['null']; };
-    console.log(res);
     for(let key in res) {
       let value = res[key];
       if(parseInt(rightNow,10) - parseInt(value.toString(),10) > (1000*60*60*24*7)) { delete res[key]; }; 
     }
     var count = Object.keys(res).length;
-    playing.textContent = count.toString() + " " + "people" + " played in the past week.";
+    var text = count==1?"person":"people";
+    playing.textContent = count.toString() + " " + text + " played in the past week.";
   });
 /*
     cyrb53 (c) 2018 bryc (github.com/bryc)
