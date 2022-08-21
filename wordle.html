@@ -26,7 +26,7 @@
 <script type="module">
   // Import the functions you need from the SDKs you need
   import { initializeApp } from "https://www.gstatic.com/firebasejs/9.9.2/firebase-app.js";
-  import { getDatabase, ref, set, get } from "https://www.gstatic.com/firebasejs/9.9.2/firebase-database.js";
+  import { getDatabase, ref, set, get, child } from "https://www.gstatic.com/firebasejs/9.9.2/firebase-database.js";
   // TODO: Add SDKs for Firebase products that you want to use
   // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -46,9 +46,10 @@
   const database = getDatabase(app);
 
   var playing = document.getElementById("playing");
-  const dbref = ref(database,'active');
-  get(dbref).then((snapshot)=>{
+  const dbref = ref(database);
+  get(child(dbref,'active').then((snapshot)=>{
     var res = snapshot.val();
+    console.log(res);
     var count = res.length;
     playing.textContent = count.toString() + " people played recently";
   });
