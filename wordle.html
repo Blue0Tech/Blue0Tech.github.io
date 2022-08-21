@@ -49,7 +49,7 @@
   const dbref = ref(database);
   get(child(dbref,'active')).then((snapshot)=>{
     var res = snapshot.val();
-    if(res['null']) { res['null'] = null; };
+    if(res['null']) { delete res['null']; };
     console.log(res);
     var count = res.length;
     playing.textContent = count.toString() + " people played recently";
