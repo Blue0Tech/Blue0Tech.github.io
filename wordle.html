@@ -47,7 +47,7 @@
 
   var playing = document.getElementById("playing");
   const dbref = ref(database);
-  get(child(dbref,'active').then((snapshot)=>{
+  get(child(dbref,'active')).then((snapshot)=>{
     var res = snapshot.val();
     console.log(res);
     var count = res.length;
