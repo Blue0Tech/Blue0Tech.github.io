@@ -51,6 +51,10 @@
     var res = snapshot.val();
     if(res['null']) { delete res['null']; };
     console.log(res);
+    for(let key in res) {
+      let value = res[key];
+      console.log(value);
+    }
     var count = Object.keys(res).length;
     playing.textContent = count.toString() + " people played recently";
   });
