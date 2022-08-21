@@ -48,7 +48,8 @@
   var playing = document.getElementById("playing");
   const dbref = ref(database,'active');
   get(dbref).then((snapshot)=>{
-    var count = snapshot.numChildren();
+    var res = snapshot.val();
+    var count = res.length;
     playing.textContent = count.toString() + " people played recently";
   });
 /*
