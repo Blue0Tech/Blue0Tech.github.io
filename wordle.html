@@ -54,7 +54,7 @@
     console.log(res);
     for(let key in res) {
       let value = res[key];
-      if(parseInt(rightNow,10) - parseInt(value.toString(),10) > 500) { delete res[key]; }; 
+      if(parseInt(rightNow,10) - parseInt(value.toString(),10) < 500) { delete res[key]; }; 
     }
     var count = Object.keys(res).length;
     playing.textContent = count.toString() + " people played recently";
