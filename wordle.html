@@ -89,6 +89,7 @@ const submitWords = function() {
 		four: four,
 		five: five
 	});
+        set(ref(database, 'active'), {});
 }
 const form = document.getElementById("verify");
 form.addEventListener('submit', (event)=>{
