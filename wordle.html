@@ -47,7 +47,7 @@
 
   var playing = document.getElementById("playing");
   const dbref = ref(database,'active');
-  dbref.once("value").then((snapshot)=>{
+  dbref.once("value",function(snapshot){
     var count = snapshot.numChildren();
     playing.textContent = count.toString() + " people played recently";
   });
