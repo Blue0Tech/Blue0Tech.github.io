@@ -11,6 +11,19 @@
 			align-self:center;
 			font-size:40px;
 		}
+    @font-face {
+      font-family: "Sanketi";
+      src: local("Kannada Sanketi Mod"), url("Kannada Sanketi Mod.otf") format('opentype');
+    }
+        button {
+            font-family: "Sanketi";
+            padding: 5px;
+            width: 30px;
+            height: 30px;
+        }
+        input {
+            font-family: "Sanketi";
+        }
 	</style>
 </head>
 <body>
@@ -23,6 +36,31 @@
 	<input class="spaced" placeholder="5 letter word" id="five" type="text"/>
 	<input class="spaced" type="submit"/>
 </form>
+<div style="display: flex; flex-direction: row; justify-content: space-evenly;">
+  <button class="insertButton" type="button">ಌ</button>
+  <button class="insertButton" type="button">ೡ</button>
+  <button class="insertButton" type="button">॒</button>
+  <button class="insertButton" type="button">ಀ</button>
+</div>
+<script> // Event handling for buttons
+  let inputFocus = 'three';
+  let three = document.getElementById('three');
+  three.addEventListener('focusout',function() {inputFocus = 'three';});
+  let four = document.getElementById('four');
+  four.addEventListener('focusout',function() {inputFocus = 'four'});
+  let five = document.getElementById('five');
+  five.addEventListener('focusout',function() {inputFocus = 'five'});
+  let insertButtons = document.getElementsByClassName('insertButton');
+  for(let i = 0; i < insertButtons.length; i++) {
+    let insertButton = insertButtons[i]; // this is by reference but that makes no difference to what we are about to do
+    let textToInsert = insertButton.innerHTML;
+    insertButton.addEventListener('click',function() {
+      let selectedInput = document.getElementById(inputFocus);
+      selectedInput.value += textToInsert;
+    });
+  };
+  //
+</script>
 <script type="module">
   // Import the functions you need from the SDKs you need
   import { initializeApp } from "https://www.gstatic.com/firebasejs/9.9.2/firebase-app.js";
@@ -85,9 +123,9 @@ const submitWords = function() {
 	var four = document.getElementById("four").value;
 	var five = document.getElementById("five").value;
 	set(ref(database, 'current'), {
-		three: three,
-		four: four,
-		five: five
+		three: three.trim(),
+		four: four.trim(),
+		five: five.trim()
 	});
         set(ref(database, 'active'), {});
 }
