@@ -1,149 +1,54 @@
 <!DOCTYPE html>
 <html>
-<head>
-	<style>
-		.spaced {
-			padding:10px;
-			margin:15px;
-			width:80%;
-			height:60px;
-			border-width:2px;
-			align-self:center;
-			font-size:40px;
-		}
-    @font-face {
-      font-family: "Sanketi";
-      src: local("Kannada Sanketi Mod"), url("Kannada Sanketi Mod.otf") format('opentype');
-    }
-        button {
-            font-family: "Sanketi";
-            padding: 5px;
-            width: 30px;
-            height: 30px;
-        }
-        input {
-            font-family: "Sanketi";
-        }
-	</style>
-</head>
-<body>
-<p id="playing" style="font-size:30px;"/>
-<p id="auth" style="font-size:30px;"/>
-<form id="verify" style="display:flex;flex-direction:column;">
-	<input class="spaced" placeholder="Enter password" id="password" type="password"/>
-	<input class="spaced" placeholder="3 letter word" id="three" type="text"/>
-	<input class="spaced" placeholder="4 letter word" id="four" type="text"/>
-	<input class="spaced" placeholder="5 letter word" id="five" type="text"/>
-	<input class="spaced" type="submit"/>
-</form>
-<div style="display: flex; flex-direction: row; justify-content: space-evenly;">
-  <button class="insertButton" type="button">ಌ</button>
-  <button class="insertButton" type="button">ೡ</button>
-  <button class="insertButton" type="button">॒</button>
-  <button class="insertButton" type="button">ಀ</button>
-</div>
-<script> // Event handling for buttons
-  let inputFocus = 'three';
-  let three = document.getElementById('three');
-  three.addEventListener('focusout',function() {inputFocus = 'three';});
-  let four = document.getElementById('four');
-  four.addEventListener('focusout',function() {inputFocus = 'four'});
-  let five = document.getElementById('five');
-  five.addEventListener('focusout',function() {inputFocus = 'five'});
-  let insertButtons = document.getElementsByClassName('insertButton');
-  for(let i = 0; i < insertButtons.length; i++) {
-    let insertButton = insertButtons[i]; // this is by reference but that makes no difference to what we are about to do
-    let textToInsert = insertButton.innerHTML;
-    insertButton.addEventListener('click',function() {
-      let selectedInput = document.getElementById(inputFocus);
-      selectedInput.value += textToInsert;
-    });
-  };
-  //
-</script>
-<script type="module">
-  // Import the functions you need from the SDKs you need
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.9.2/firebase-app.js";
-  import { getDatabase, ref, set, get, child } from "https://www.gstatic.com/firebasejs/9.9.2/firebase-database.js";
-  // TODO: Add SDKs for Firebase products that you want to use
-  // https://firebase.google.com/docs/web/setup#available-libraries
-
-  // Your web app's Firebase configuration
-  const firebaseConfig = {
-    apiKey: "AIzaSyC6KfUA7nkVcivPV1ZinRQJRVX--oFRVoA",
-    authDomain: "sanketi-wordle.firebaseapp.com",
-    databaseURL: "https://sanketi-wordle-default-rtdb.asia-southeast1.firebasedatabase.app",
-    projectId: "sanketi-wordle",
-    storageBucket: "sanketi-wordle.appspot.com",
-    messagingSenderId: "553055548163",
-    appId: "1:553055548163:web:79792087901a57db16ef36"
-  };
-
-  // Initialize Firebase
-  const app = initializeApp(firebaseConfig);
-  const database = getDatabase(app);
-
-  var playing = document.getElementById("playing");
-  const dbref = ref(database);
-  get(child(dbref,'active')).then((snapshot)=>{
-    var res = snapshot.val();
-    var rightNow = Date.now().toString();
-    if(res['null']) { delete res['null']; };
-    for(let key in res) {
-      let value = res[key];
-      if(parseInt(rightNow,10) - parseInt(value.toString(),10) > (1000*60*60*24*7)) { delete res[key]; }; 
-    }
-    var count = Object.keys(res).length;
-    var text = count==1?"person":"people";
-    playing.textContent = count.toString() + " " + text + " played in the past week.";
-  });
-/*
-    cyrb53 (c) 2018 bryc (github.com/bryc)
-    A fast and simple hash function with decent collision resistance.
-    Largely inspired by MurmurHash2/3, but with a focus on speed/simplicity.
-    Public domain. Attribution appreciated.
-*/
-const cyrb53 = function(str, seed = 0) {
-    let h1 = 0xdeadbeef ^ seed, h2 = 0x41c6ce57 ^ seed;
-    for (let i = 0, ch; i < str.length; i++) {
-        ch = str.charCodeAt(i);
-        h1 = Math.imul(h1 ^ ch, 2654435761);
-        h2 = Math.imul(h2 ^ ch, 1597334677);
-    }
-    h1 = Math.imul(h1 ^ (h1>>>16), 2246822507) ^ Math.imul(h2 ^ (h2>>>13), 3266489909);
-    h2 = Math.imul(h2 ^ (h2>>>16), 2246822507) ^ Math.imul(h1 ^ (h1>>>13), 3266489909);
-    return 4294967296 * (2097151 & h2) + (h1>>>0);
-};
-
-var seed = 359;
-var correctHash = 3853442602068247;
-
-const submitWords = function() {
-	var three = document.getElementById("three").value;
-	var four = document.getElementById("four").value;
-	var five = document.getElementById("five").value;
-	set(ref(database, 'current'), {
-		three: three,
-		four: four,
-		five: five
-	});
-        set(ref(database, 'active'), {});
-}
-const form = document.getElementById("verify");
-form.addEventListener('submit', (event)=>{
-	event.preventDefault();
-	var val = document.getElementById("password").value;
-	var res = cyrb53(val,seed);
-    var auth = document.getElementById("auth");
-    if(res==correctHash) {
-    	auth.textContent = "Correct password, these words have been submitted as daily words!";
-        submitWords();
-    } else {
-    	auth.textContent = "Incorrect password. Please try again.";
-    }
-});
-
-
-</script>
-</body>
+    <head>
+        <meta name="viewport" content="initial-scale=1.0", width="device-width">
+        <link rel="stylesheet" type="text/css" href="style.css">
+        <title>Blue0Tech</title>
+    </head>
+    <body>
+        <nav id="nav">
+            <a href="https://github.com/Blue0Tech"><img class="navbar-icon" src="./assets/GitHub-Mark-64px.png" alt=""/>Github</a>
+            <a href="https://play.google.com/store/apps/details?id=com.blue0tech.learn_to_help"><img class="navbar-icon" src="./assets/Learn2Help_logo.png" alt=""/>Learn2Help (android)</a>
+            <a href="https://blue0tech.github.io/sanketi-wordle"><img class="navbar-icon" src="./assets/vaarchol.png" alt=""/>Vaarchol/ವಾರ್ಚೊಲ್</a>
+        </nav>
+        <h1>Pruthvi Shrikaanth (Blue0Tech)</h1>
+        <div id="jump-to-menu">
+            Jump to: <a href="#key-projects">Key projects</a> | <a href="#about-me">About me</a>
+            <br/>
+        </div>
+            Contact me at <a href="mailto:blue0techprogramming@gmail.com" target="_blank" id="contact">blue0techprogramming@gmail.com</a>
+        <ul>
+            <p id="key-projects" class="subsection-title">Key projects:</p>
+            <li>
+                <a href="https://github.com/Blue0Tech/stories" target="_blank">Story Genie</a> - An app to read and write stories. Built with expo supported react-native using nodejs.
+            </li>
+            <li>
+                <a href="https://github.com/Blue0Tech/GPCE" target="_blank">GPCE</a> - A discontinued experimental command-line application with some general purpose commands. Built with dotnet in C#.
+            </li>
+            <li>
+                <a href="https://github.com/Blue0Tech/learn_to_help" target="_blank">Learn2Help</a> - A first aid training app, released on google play. Built with flutter.
+            </li>
+            <li>
+                <a href="https://github.com/Blue0Tech/sanketi-wordle" target="_blank">Vaarchol/ವಾರ್ಚೊಲ್</a> - A Sanketi version of wordle built in typescript.
+            </li>
+        </ul>
+        <ul>
+            <p id="about-me" class="subsection-title">About me</p>
+            <b class="q">Who am I?</b>
+            <li>
+                I am a college student situated in the UK. I enjoy not only programming but also gaming, and I enjoy exploring the outdoors.
+            </li>
+            <b class="q">What do I do?</b>
+            <li>
+                I love building applications and programming in general. I do it for a hobby but would like to start a business with these talents one day. I use dotnet C# and nodejs, as well as building flutter and expo applications. I'm a fan of linux mint but use windows more often.
+            </li>
+            <b class="q">Am I open to collaborative projects?</b>
+            <li>
+                I'd love to do a collaborative project, just <a href="#contact">contact me</a>. The details are at the top of the page.
+            </li>
+        </ul>
+        <a href="#nav" id="back-to-top">Back to top<br/><br/></a>
+        <footer><marquee id="marquee-footer">Copyright 2022 Pruthvi Shrikaanth.</marquee><div id="basic-text-footer">Copyright 2022 Pruthvi Shrikaanth</div></footer>
+        <div id="psst"><br/>Psst! This page is accessible on mobile and tablet as well! Try it out!</div>
+    </body>
 </html>
