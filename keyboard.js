@@ -2,6 +2,10 @@ import { characters, vowelToVowelMap } from './constants.js';
 import { snkTokenize } from './tokeniser.js';
 const keyboard = document.getElementById('keyboard');
 let textarea = document.getElementById('textBox');
+textarea.readOnly = true;
+textarea.addEventListener('click',function() {
+	textarea.readOnly = false;
+});
 textarea.value = localStorage.getItem('text')??'';
 textarea.addEventListener('input',function() {
 	localStorage.setItem('text',textarea.value);
@@ -29,7 +33,7 @@ for(let row = 0; row < 5; row++) {
 					textarea.selectionStart = start - 1;
 					textarea.selectionEnd = start - 1;
 				};
-				textarea.blur();
+				textarea.readOnly = true;
 				localStorage.setItem('text',textarea.value);
 				e.preventDefault();
 			});
@@ -80,5 +84,5 @@ function updateText(text) {
 	textarea.value = textarea.value.substring(0,start) + text + textarea.value.substring(textarea.selectionEnd);
 	textarea.selectionStart = start + 1;
 	textarea.selectionEnd = start + 1;
-	textarea.blur();
+	textarea.readOnly = true;
 };
