@@ -1,0 +1,36 @@
+@font-face {
+    font-family: Sanketi;
+    src: local("Kannada Sanketi Mod"), url("Kannada Sanketi Mod.otf") format('opentype');
+}
+textarea {
+    resize: none;
+    padding: 5px;
+    width: 85%;
+    height: 20vh;
+    display: block;
+    margin: 0 auto;
+    margin-bottom: 10px;
+    font-family: Sanketi;
+    font-size: 125%;
+}
+#keyboard {
+    display: grid;
+    grid-template-columns: repeat(12,1fr);
+    grid-template-rows: repeat(5,1fr);
+    gap: 5px;
+    width: 65%;
+    margin: 0 auto;
+    justify-content: center;
+}
+.key {
+    padding: 10px;
+    text-align: center;
+    background-color: #cccccc;
+    color: #000000;
+    border: none;
+    cursor: pointer;
+    font-family: Sanketi;
+    font-size: 150%;
+    width: 55px;
+    height: 50px;
+}
