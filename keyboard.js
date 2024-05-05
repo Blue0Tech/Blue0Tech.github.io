@@ -29,6 +29,7 @@ for(let row = 0; row < 5; row++) {
 					textarea.selectionStart = start - 1;
 					textarea.selectionEnd = start - 1;
 				};
+				textarea.blur();
 				localStorage.setItem('text',textarea.value);
 				e.preventDefault();
 			});
@@ -79,4 +80,5 @@ function updateText(text) {
 	textarea.value = textarea.value.substring(0,start) + text + textarea.value.substring(textarea.selectionEnd);
 	textarea.selectionStart = start + 1;
 	textarea.selectionEnd = start + 1;
+	textarea.blur();
 };
