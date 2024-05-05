@@ -2,10 +2,6 @@
     font-family: Sanketi;
     src: local("Kannada Sanketi Mod"), url("Kannada Sanketi Mod.otf") format('opentype');
 }
-@font-face {
-    font-family: SanketiTwo;
-    src: local("Shri Sanketi"), url("Shri Sanketi.ttf") format('truetype');
-}
 textarea {
     resize: none;
     padding: 5px;
@@ -14,7 +10,7 @@ textarea {
     display: block;
     margin: 0 auto;
     margin-bottom: 10px;
-    font-family: SanketiTwo;
+    font-family: Sanketi;
     font-size: 125%;
 }
 #keyboard {
@@ -33,7 +29,7 @@ textarea {
     color: #000000;
     border: none;
     cursor: pointer;
-    font-family: SanketiTwo;
+    font-family: Sanketi;
     font-size: 150%;
     width: 55px;
     height: 50px;
