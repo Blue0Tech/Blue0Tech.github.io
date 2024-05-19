@@ -2,6 +2,9 @@
     font-family: Sanketi;
     src: local("Kannada Sanketi Mod"), url("Kannada Sanketi Mod.otf") format('opentype');
 }
+body {
+    touch-action: manipulation;
+}
 textarea {
     resize: none;
     padding: 5px;
@@ -14,13 +17,26 @@ textarea {
     font-size: 125%;
 }
 #keyboard {
+    display: flex;
+}
+.keyboardPart {
     display: grid;
-    grid-template-columns: repeat(12,1fr);
     grid-template-rows: repeat(5,1fr);
     gap: 5px;
-    width: 65%;
     margin: 0 auto;
     justify-content: center;
+}
+#swara {
+    grid-template-columns: repeat(4,1fr);
+    width: 20%;
+}
+#vyanjana {
+    grid-template-columns: repeat(7,1fr);
+    width: 35%;
+}
+#symbol {
+    grid-template-columns: repeat(4,1fr);
+    width: 20%;
 }
 .key {
     padding: 10px;
