@@ -6,20 +6,33 @@ const symbol = document.getElementById('symbol');
 let keys = [];
 let textarea = document.getElementById('textBox');
 const body = document.getElementsByTagName('body')[0];
-let recentCursorPosition = 0;
+textarea.readOnly = true;
+textarea.value = localStorage.getItem('text')??'';
+if(textarea.value.slice(-1)!='^') {
+	textarea.value = textarea.value + '^';
+};
+let recentCursorPosition = textarea.value.length - 1;
+textarea.selectionStart = textarea.selectionEnd = recentCursorPosition;
 body.addEventListener('mousedown',(e)=>{
 	if(e.target.type!='textarea') {
-		textarea.selectionStart = recentCursorPosition;
-		textarea.selectionEnd = recentCursorPosition;
 		e.preventDefault();
 	};
 });
-textarea.readOnly = true;
 textarea.addEventListener('click',function() {
+	if(textarea.value[recentCursorPosition]=='^') {
+		let start = textarea.selectionStart;
+		let end = textarea.selectionEnd;
+		textarea.value = textarea.value.substring(0,recentCursorPosition) + textarea.value.substring(recentCursorPosition+1);
+		textarea.selectionStart = start;
+		textarea.selectionEnd = end;
+	};
 	textarea.readOnly = false;
 });
-textarea.value = localStorage.getItem('text')??'';
 textarea.addEventListener('input',function() {
+	let textToSave = textarea.value;
+	if(textToSave[recentCursorPosition]=='^') {
+		textToSave = textToSave.substring(0,recentCursorPosition) + textToSave.substring(recentCursorPosition+1);
+	};
 	localStorage.setItem('text',textarea.value);
 });
 for(let row = 0; row < 5; row++) {
@@ -45,13 +58,21 @@ for(let row = 0; row < 5; row++) {
 			key.addEventListener('mousedown',(e)=>{
 				let start = textarea.selectionStart;
 				let end = textarea.selectionEnd;
-				if(end > start) {
-					textarea.value = textarea.value.substring(0,start) + textarea.value.substring(end);
+				if(end > start || start == 0) {
+					if(textarea.value[end]=='^') {
+						textarea.value = textarea.value.substring(0,start) + textarea.value.substring(end);
+					} else {
+						textarea.value = textarea.value.substring(0,start) + '^' + textarea.value.substring(end);
+					};
 					textarea.selectionStart = start;
 					textarea.selectionEnd = start;
 					recentCursorPosition = start;
-				} else if(start > 0) {
-					textarea.value = textarea.value.substring(0,start - 1) + textarea.value.substring(end);
+				} else { // if start > 0
+					if(textarea.value[end]=='^') {
+						textarea.value = textarea.value.substring(0,start - 1) + textarea.value.substring(end);
+					} else {
+						textarea.value = textarea.value.substring(0,start - 1) + '^' + textarea.value.substring(end);
+					};
 					textarea.selectionStart = start - 1;
 					textarea.selectionEnd = start - 1;
 					recentCursorPosition = start - 1;
@@ -111,7 +132,11 @@ function tokeniseLastWord(text) {
 };
 function updateText(text) {
 	let start = textarea.selectionStart;
-	textarea.value = textarea.value.substring(0,start) + text + textarea.value.substring(textarea.selectionEnd);
+	if (textarea.value[start]=='^') {
+		textarea.value = textarea.value.substring(0,start) + text + '^' + textarea.value.substring(textarea.selectionEnd + 1);
+	} else {
+		textarea.value = textarea.value.substring(0,start) + text + '^' + textarea.value.substring(textarea.selectionEnd);
+	};
 	textarea.selectionStart = start + 1;
 	textarea.selectionEnd = start + 1;
 	recentCursorPosition = start + 1;
