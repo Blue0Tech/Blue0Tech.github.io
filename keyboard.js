@@ -8,10 +8,10 @@ let textarea = document.getElementById('textBox');
 const body = document.getElementsByTagName('body')[0];
 textarea.readOnly = true;
 textarea.value = localStorage.getItem('text')??'';
-if(textarea.value.slice(-1)!='^') {
-	textarea.value = textarea.value + '^';
+let recentCursorPosition = localStorage.getItem('cursorPosition')??(textarea.value.length-1);
+if(textarea.value[recentCursorPosition]!='^') {
+	textarea.value = textarea.value.substring(0,recentCursorPosition) + '^' + textarea.value.substring(recentCursorPosition);
 };
-let recentCursorPosition = textarea.value.length - 1;
 textarea.selectionStart = textarea.selectionEnd = recentCursorPosition;
 body.addEventListener('mousedown',(e)=>{
 	if(e.target.type!='textarea') {
@@ -22,6 +22,12 @@ textarea.addEventListener('click',function() {
 	if(textarea.value[recentCursorPosition]=='^') {
 		let start = textarea.selectionStart;
 		let end = textarea.selectionEnd;
+		if(end>recentCursorPosition) {
+			end -= 1;
+		};
+		if(start>recentCursorPosition) {
+			start -= 1;
+		};
 		textarea.value = textarea.value.substring(0,recentCursorPosition) + textarea.value.substring(recentCursorPosition+1);
 		textarea.selectionStart = start;
 		textarea.selectionEnd = end;
@@ -34,6 +40,7 @@ textarea.addEventListener('input',function() {
 		textToSave = textToSave.substring(0,recentCursorPosition) + textToSave.substring(recentCursorPosition+1);
 	};
 	localStorage.setItem('text',textarea.value);
+	localStorage.setItem('cursorPosition',recentCursorPosition);
 });
 for(let row = 0; row < 5; row++) {
 	keys.push([]);
@@ -79,28 +86,35 @@ for(let row = 0; row < 5; row++) {
 				};
 				textarea.readOnly = true;
 				localStorage.setItem('text',textarea.value);
+				localStorage.setItem('cursorPosition',recentCursorPosition);
 				e.preventDefault();
 			});
 		} else if(row == 2) {
 			key.addEventListener('mousedown',(e)=>{
 				updateText('\n');
 				localStorage.setItem('text',textarea.value);
+				localStorage.setItem('cursorPosition',recentCursorPosition);
 				e.preventDefault();
 			});
 		} else if(row == 3) {
 			key.addEventListener('mousedown',(e)=>{
 				updateText(' ');
 				localStorage.setItem('text',textarea.value);
+				localStorage.setItem('cursorPosition',recentCursorPosition);
 				e.preventDefault();
 			});
 		} else if(row == 4) {
 			key.addEventListener('mousedown',(e)=>{
 				e.preventDefault();
+				if(textarea.value[recentCursorPosition]=='^') {
+					textarea.value = textarea.value.substring(0,recentCursorPosition) + textarea.value.substring(recentCursorPosition+1);
+				};
 				navigator.clipboard.writeText(textarea.value).then(()=>{
 					alert("Copied text to clipboard successfully!");
 				}).catch(()=>{
 					alert("There was a problem copying to the clipboard.");
 				});
+				textarea.value = textarea.value.substring(0,recentCursorPosition) + '^' + textarea.value.substring(recentCursorPosition);
 			});
 		};
 		if(col < 4) {
@@ -121,6 +135,7 @@ function insertCharacter(key) {
 		updateText(vowelToVowelMap.get(key));
 	};
 	localStorage.setItem('text',textarea.value);
+	localStorage.setItem('cursorPosition',recentCursorPosition);
 };
 function tokeniseLastWord(text) {
 	let finalWord = text.split(' ').slice(-1)[0];
