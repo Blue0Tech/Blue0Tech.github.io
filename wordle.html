@@ -67,6 +67,7 @@
   // Import the functions you need from the SDKs you need
   import { initializeApp } from "https://www.gstatic.com/firebasejs/9.9.2/firebase-app.js";
   import { getDatabase, ref, set, get, child } from "https://www.gstatic.com/firebasejs/9.9.2/firebase-database.js";
+  import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.9.2/firebase-auth.js";
   // TODO: Add SDKs for Firebase products that you want to use
   // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -84,6 +85,23 @@
   // Initialize Firebase
   const app = initializeApp(firebaseConfig);
   const database = getDatabase(app);
+  const auth = getAuth(app);
+
+  const signIn = (password) => {
+    var authMessage = document.getElementById("auth");
+    signInWithEmailAndPassword(auth, "sanketi@vaarchol.game", password)
+      .then(async (cred) => {
+        try {
+          await submitWords();
+          authMessage.textContent = "Correct password, these words have been submitted as daily words!";
+        } catch (error) {
+          authMessage.textContent = "There was some other error that caused the words to not update.";
+        };
+      })
+      .catch((error) => {
+        authMessage.textContent = "Incorrect password. Please try again.";
+      });
+  };
 
   var playing = document.getElementById("playing");
   const dbref = ref(database);
@@ -99,26 +117,6 @@
     var text = count==1?"person":"people";
     playing.textContent = count.toString() + " " + text + " played in the past week.";
   });
-/*
-    cyrb53 (c) 2018 bryc (github.com/bryc)
-    A fast and simple hash function with decent collision resistance.
-    Largely inspired by MurmurHash2/3, but with a focus on speed/simplicity.
-    Public domain. Attribution appreciated.
-*/
-const cyrb53 = function(str, seed = 0) {
-    let h1 = 0xdeadbeef ^ seed, h2 = 0x41c6ce57 ^ seed;
-    for (let i = 0, ch; i < str.length; i++) {
-        ch = str.charCodeAt(i);
-        h1 = Math.imul(h1 ^ ch, 2654435761);
-        h2 = Math.imul(h2 ^ ch, 1597334677);
-    }
-    h1 = Math.imul(h1 ^ (h1>>>16), 2246822507) ^ Math.imul(h2 ^ (h2>>>13), 3266489909);
-    h2 = Math.imul(h2 ^ (h2>>>16), 2246822507) ^ Math.imul(h1 ^ (h1>>>13), 3266489909);
-    return 4294967296 * (2097151 & h2) + (h1>>>0);
-};
-
-var seed = 359;
-var correctHash = 3853442602068247;
 
 const submitWords = function() {
 	var three = document.getElementById("three").value;
@@ -129,20 +127,13 @@ const submitWords = function() {
 		four: four.trim(),
 		five: five.trim()
 	});
-        set(ref(database, 'active'), {});
+  set(ref(database, 'active'), {});
 }
 const form = document.getElementById("verify");
 form.addEventListener('submit', (event)=>{
 	event.preventDefault();
 	var val = document.getElementById("password").value;
-	var res = cyrb53(val,seed);
-    var auth = document.getElementById("auth");
-    if(res==correctHash) {
-    	auth.textContent = "Correct password, these words have been submitted as daily words!";
-        submitWords();
-    } else {
-    	auth.textContent = "Incorrect password. Please try again.";
-    }
+	signIn(val);
 });
 
 
