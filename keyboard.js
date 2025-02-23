@@ -28,7 +28,7 @@ textarea.addEventListener('click',function() {
 		if(start>recentCursorPosition) {
 			start -= 1;
 		};
-		textarea.value = textarea.value.substring(0,recentCursorPosition) + textarea.value.substring(recentCursorPosition+1);
+		textarea.value = textarea.value.substring(0,recentCursorPosition) + textarea.value.substring(parseInt(recentCursorPosition,10)+1);
 		textarea.selectionStart = start;
 		textarea.selectionEnd = end;
 	};
