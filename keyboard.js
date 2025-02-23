@@ -37,7 +37,7 @@ textarea.addEventListener('click',function() {
 textarea.addEventListener('input',function() {
 	let textToSave = textarea.value;
 	if(textToSave[recentCursorPosition]=='^') {
-		textToSave = textToSave.substring(0,recentCursorPosition) + textToSave.substring(recentCursorPosition+1);
+		textToSave = textToSave.substring(0,recentCursorPosition) + textToSave.substring(parseInt(recentCursorPosition,10)+1);
 	};
 	localStorage.setItem('text',textarea.value);
 	localStorage.setItem('cursorPosition',recentCursorPosition);
@@ -107,7 +107,7 @@ for(let row = 0; row < 5; row++) {
 			key.addEventListener('mousedown',(e)=>{
 				e.preventDefault();
 				if(textarea.value[recentCursorPosition]=='^') {
-					textarea.value = textarea.value.substring(0,recentCursorPosition) + textarea.value.substring(recentCursorPosition+1);
+					textarea.value = textarea.value.substring(0,recentCursorPosition) + textarea.value.substring(parseInt(recentCursorPosition,10)+1);
 				};
 				navigator.clipboard.writeText(textarea.value).then(()=>{
 					alert("Copied text to clipboard successfully!");
